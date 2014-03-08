@@ -1,4 +1,3 @@
-
 import numpy as np
 import Utilities as utils
 
@@ -24,8 +23,7 @@ class NeuralNetwork(object):
 			self.vW[i - 1] = np.zeros(self.W[i - 1].shape)
 			self.p[i] = np.zeros((1, self.size[i]))
 
-	def apply_gradients(self):
-		
+	def apply_gradients(self):		
 		for i in xrange(self.n - 1):
 			if self.weight_penalty > 0:
 				# TO-DO
@@ -106,7 +104,6 @@ class NeuralNetwork(object):
 			index = np.random.permutation(m)
 
 			for j in xrange(n_batches):
-
 				batch_x = train_x[index[(j - 1) * batchsize + 1 : j * batchsize],:]
 
 				if self.zero_masked_fraction != 0:
@@ -154,6 +151,43 @@ class NeuralNetwork(object):
 		self.output = "sigmoid"
 
 
+	def backpropogation(self):
+		sparsity_error = 0
+		n = self.n
+		if self.output == "sigmoid":
+			derivatives[n] = -1 * self.e * self.a[n] * (1 - self.a[n])
+		else if self.output == "softmax" or self.output == "linear":
+			derivatives[n] = -1 * self.e
+
+		for i in xrange(n - 2, 1, -1):
+			if self.activation_function == "sigmoid":
+				activation_function_derivative = self.a[i] * (1 - self.a[i])
+			else if self.activation_function == "tanh_opt":
+				activation_function_derivative = 1.7159 * 2/3 * (1 - 1/1.7159**2 * self.a[i]**2)
+
+			if self.sparsity_penalty > 0:
+				pi = np.tile(self.p[i], (self.a[1].shape[0]), 1))
+				sparsity_error = [np.zeros(self.a[i].shape[0], 1),
+								  self.sparsity_penalty *
+								  (-1 * self.sparsity_target / pi +
+								   (1 - self.sparsity_target) / (1 - pi))]
+
+			# Backpropogate first derivatives
+			if i + 1 == n: # no bias term to be removed
+				derivatives[i] = (np.dot(derviatives[i + 1],
+										 self.W[i]) + sparsity_error) * activation_function_derivative
+			else:
+				derivatives[i] = (np.dot(derivatives[i + 1][:,1:],
+										 self.W[i]) + sparsity_error) * activation_function_derivative
+
+			if self.dropout_fraction > 0:
+				derivatives[i] = derivatives[i] * [np.ones(derivatives.shape[0], 1), self.dropout_mask[i]]
+
+		for i in xrange(n - 2):
+			if i + 1 == n:
+				self.dW[i] = (np.dot(derivatives[i].T, self.a[i])) / derivatives[i + 1].shape[0])
+			else:
+				self.dW[i] = (np.dot(derivatives[i + 1][:,1:].T, self.a[i])) / derivatives[i + 1].shape[0])
 
 
 nn = NeuralNetwork((4,65))
