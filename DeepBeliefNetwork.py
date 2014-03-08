@@ -3,8 +3,17 @@ import RestrictedBoltzmannMachine as rbm
 
 class DeepBeliefNetwork(object):
 	"""docstring for DeepBeliefNetwork"""
-	def __init__(self):
+	def __init__(self, x, opts):
 		super(DeepBeliefNetwork, self).__init__()
+
+		n = x.shape[1]
+		self.sizes = np.append(n, self.sizes)
+
+		for u in range(len(self.sizes - 1)):
+
+			self.rbm[u] = rbm.RestrictedBoltzmannMachine(self.sizes[u:u + 1], opts)
+			
+
 
 	def train(self, x, opts):
 		n = len(self.rbm)

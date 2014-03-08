@@ -104,12 +104,12 @@ class NeuralNetwork(object):
 			index = np.random.permutation(m)
 
 			for j in xrange(n_batches):
-				batch_x = train_x[index[(j - 1) * batchsize + 1 : j * batchsize],:]
+				batch_x = train_x[index[(j - 1) * batchsize : j * batchsize - 1], :]
 
 				if self.zero_masked_fraction != 0:
 					batch_x = batch_x * (np.random.rand(batch_x.shape) > self.zero_masked_fraction)
 
-				batch_y = train_y[index[(j - 1) * batchsize + 1 : j * batchsize],:]
+				batch_y = train_y[index[(j - 1) * batchsize : j * batchsize - 1], :]
 
 				self.feedforward(batch_x, batch_y)
 				self.backpropogation()
