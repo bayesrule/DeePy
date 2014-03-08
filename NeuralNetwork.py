@@ -23,7 +23,7 @@ class NeuralNetwork(object):
 			self.vW[i - 1] = np.zeros(self.W[i - 1].shape)
 			self.p[i] = np.zeros((1, self.size[i]))
 
-	def apply_gradients(self):		
+	def apply_gradients(self):
 		for i in xrange(self.n - 1):
 			if self.weight_penalty > 0:
 				# TO-DO
@@ -44,7 +44,7 @@ class NeuralNetwork(object):
 		m = x.shape[0]
 
 		x = np.append(np.ones((m,1)), x)
-		
+
 		# TO-DO
 		self.a = [None] * (n - 1)
 		self.a[0] = x
@@ -93,7 +93,7 @@ class NeuralNetwork(object):
 
 		batchsize = opts["batchsize"]
 		n_epochs = opts["n_epochs"]
-		
+
 		n_batches = m / batchsize
 
 		L = np.zeros((n_epochs * n_batches,1))
@@ -124,7 +124,7 @@ class NeuralNetwork(object):
 		labels = self.predict(x)
 	    expected = y.argmax(axis = 1)
     	error = np.sum(labels != expected) / float(x.shape[0])
-    	
+
     	return error
 
     def predict(self, x):
