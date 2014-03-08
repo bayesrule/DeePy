@@ -31,5 +31,6 @@ Python Financial Tools relies on the libraries listed below:
 We were inspired to create this toolbox by the excellent work of Rasmus Berg Palm. Please see his MATLAB toolbox for deep learning.
 
 ```
-R. B. Palm. "Prediction as a candidate for learning deep hierarchical models of data". Masters thesis. 2012. 08 Mar. 2014.
+R. B. Palm. "Prediction as a candidate for learning deep hierarchical models of data". 
+Masters thesis. 2012. 08 Mar. 2014.
 ```
