@@ -16,7 +16,7 @@ class NeuralNetwork(object):
 
 		self.set_options()
 
-		for i in range(1,self.n):
+		for i in xrange(1,self.n):
 
 			self.W[i - 1] = (np.random.rand(self.size[i], self.size[i - 1] + 1) - 0.5) * 2.0 * 8.0 * np.sqrt(
 				6.0 / (self.size[i] + self.size[i - 1])
@@ -26,7 +26,7 @@ class NeuralNetwork(object):
 
 	def apply_gradients(self):
 		
-		for i in range(self.n - 1):
+		for i in xrange(self.n - 1):
 			if self.weight_penalty > 0:
 				# TO-DO
 				dW = self.dW[i] + self.weight_penalty * np.zeros((self.W[i].shape[0], 1)).append(self.W[i][:, 1:])
@@ -51,7 +51,7 @@ class NeuralNetwork(object):
 		self.a = [None] * (n - 1)
 		self.a[0] = x
 
-		for i in range(1, n-1):
+		for i in xrange(1, n-1):
 
 			if self.activation_function == "sigmoid":
 
@@ -86,7 +86,7 @@ class NeuralNetwork(object):
 				self.L = 1.0 / 2 * np.sum(self.e ** 2) / m
 			elif self.output == "softmax":
 				self.L = -np.sum(y * np.log(self.a[n - 1])) / m
-			
+
 
 	def train(self, train_x, train_y, opts, validate_x, validate_y):
 		loss = {"train" : {"e" : [], "e_frac" : []}, "validate" : {"e" : [], "e_frac" : []}}
@@ -101,11 +101,11 @@ class NeuralNetwork(object):
 		L = np.zeros((n_epochs * n_batches,1))
 		n = 0
 
-		for i in range(n_batches):
+		for i in xrange(n_batches):
 
 			index = np.random.permutation(m)
 
-			for j in range(n_batches):
+			for j in xrange(n_batches):
 
 				batch_x = train_x[index[(j - 1) * batchsize + 1 : j * batchsize],:]
 
